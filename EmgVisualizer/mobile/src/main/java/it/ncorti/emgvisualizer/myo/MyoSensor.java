@@ -51,11 +51,11 @@ public class MyoSensor extends Sensor {
     /**
      * Myo emg actual min value
      */
-    private static final float MYO_MIN_VALUE = -120;
+    private static final float MYO_MIN_VALUE = -127;
     /**
      * Myo emg actual max value
      */
-    private static final float MYO_MAX_VALUE = 120;
+    private static final float MYO_MAX_VALUE = 128;
 
     /**
      * Reference to bluetooth scanner
