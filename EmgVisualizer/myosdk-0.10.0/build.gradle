@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('myosdk-0.10.0.aar'))

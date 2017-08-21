@@ -17,6 +17,7 @@ package it.ncorti.emgvisualizer.ui.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -29,9 +30,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.opencsv.CSVWriter;
 import com.squareup.otto.Subscribe;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.LinkedList;
 
 import it.ncorti.emgvisualizer.R;
@@ -74,6 +85,11 @@ public class GraphFragment extends Fragment {
     /** Array of normalized points */
     private float[] normalized;
 
+    /** For saving to CSV **/
+    private Calendar cal = Calendar.getInstance();
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyyddMM");
+    private String filename;
+    private float[] real;
 
     /**
      * Public constructor to create a new  GraphFragment
@@ -81,6 +97,7 @@ public class GraphFragment extends Fragment {
     public GraphFragment() {
         this.sensor = MySensorManager.getInstance().getMyo();
         this.normalized = new float[sensor.getChannels()];
+        this.real = new float[sensor.getChannels()];
     }
 
     @Override
@@ -139,6 +156,7 @@ public class GraphFragment extends Fragment {
      * Method to initialize sensor data to be displayed
      */
     protected void initialiseSensorData() {
+
         spread = sensor.getMaxValue() - sensor.getMinValue();
         LinkedList<RawDataPoint> dataPoints = sensor.getDataPoints();
 
@@ -202,9 +220,12 @@ public class GraphFragment extends Fragment {
     public void onSensorUpdatedEvent(SensorUpdateEvent event) {
         if (!event.getSensor().getName().contentEquals(sensor.getName())) return;
         for (int i = 0; i < sensor.getChannels(); i++) {
+            real[i] = (event.getDataPoint().getValues()[i] - sensor.getMinValue());
+            /*TODO:  we can transition to normalized from real */
             normalized[i] = (event.getDataPoint().getValues()[i] - sensor.getMinValue()) / spread;
         }
         this.graph.addNewDataPoint(normalized);
+        SaveToCSV(real);
     }
 
     /**
@@ -224,6 +245,31 @@ public class GraphFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.graph_menu, menu);
     }
+
+    public void SaveToCSV(float[] a) {
+        filename = sdf.format(cal.getTime()) + "-emg.csv";
+        File file = new File(getActivity().getExternalFilesDir(null), filename);
+        CSVWriter writer;
+        try {
+            if(file.exists() && !file.isDirectory()){
+                FileWriter mFileWriter = new FileWriter(file, true);
+                writer = new CSVWriter(mFileWriter);
+            }
+            else {
+                writer = new CSVWriter(new FileWriter(file));
+            }
+            String[] entries = Arrays.toString(a).split(",");
+            writer.writeNext(entries);
+//            String[] data = {"Ship Name","Scientist Name", "...",new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").formatter.format(date)});
+//            writer.writeNext(data);
+            writer.close();
+            Log.i("SaveTOCSV", "data added successfully");
+        } catch (IOException e) {
+            Log.e("CSVWriter","IOEXCEPTION");
+        }
+    }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

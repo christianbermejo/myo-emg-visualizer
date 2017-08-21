@@ -1,1 +1,1 @@
-include ':mobile'
+include ':mobile', ':myosdk-0.10.0'
