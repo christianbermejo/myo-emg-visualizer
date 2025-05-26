@@ -14,13 +14,14 @@ import java.nio.ByteOrder
  */
 class ByteReader {
 
-    internal var byteBuffer: ByteBuffer? = null
+    private var byteBuffer: ByteBuffer? = null
 
     var byteData: ByteArray? = null
         set(data) {
             field = data
-            this.byteBuffer = ByteBuffer.wrap(field)
-            byteBuffer?.order(ByteOrder.nativeOrder())
+            this.byteBuffer = field?.let { ByteBuffer.wrap(it) }?.apply {
+                order(ByteOrder.nativeOrder())
+            }
         }
 
     val short: Short

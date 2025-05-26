@@ -1,0 +1,43 @@
+[versions]
+min_sdk_version = "31"
+target_sdk_version = "35"
+compile_sdk_version = "35"
+
+agp = "8.8.2"
+androidx_recyclerview = "1.4.0"
+appcompat = "1.7.0"
+appintro = "6.3.1"
+constraintlayout = "2.2.1"
+dagger = "2.16"
+detekt = "1.23.8"
+junit = "4.13.2"
+kotlin = "2.1.10"
+materialcomponents = "1.12.0"
+mockitoCore = "3.12.4"
+mockitoKotlin = "2.2.0"
+rxandroid2 = "2.1.1"
+rxjava2 = "2.2.21"
+
+[libraries]
+androidx_appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+androidx_constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
+androidx_recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "androidx_recyclerview" }
+appintro = { module = "com.github.paolorotolo:appintro", version.ref = "appintro" }
+dagger = { module = "com.google.dagger:dagger", version.ref = "dagger" }
+dagger_android = { module = "com.google.dagger:dagger-android-support", version.ref = "dagger" }
+dagger_android_processor = { module = "com.google.dagger:dagger-android-processor", version.ref = "dagger" }
+dagger_compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger" }
+junit = { module = "junit:junit", version.ref = "junit" }
+materialcomponents = { module = "com.google.android.material:material", version.ref = "materialcomponents" }
+mockito_core = { module = "org.mockito:mockito-core", version.ref = "mockitoCore" }
+mockito_kotlin = { module = "com.nhaarman.mockitokotlin2:mockito-kotlin", version.ref = "mockitoKotlin" }
+rxandroid2 = { module = "io.reactivex.rxjava2:rxandroid", version.ref = "rxandroid2" }
+rxjava2 = { module = "io.reactivex.rxjava2:rxjava", version.ref = "rxjava2" }
+detekt_formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
+
+[plugins]
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
